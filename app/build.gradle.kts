@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.lockdown"
+    namespace = "com.ashwinsagar.lockdown"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.lockdown"
+        applicationId = "com.ashwinsagar.lockdown"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

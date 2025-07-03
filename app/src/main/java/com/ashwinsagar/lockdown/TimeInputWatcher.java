@@ -1,4 +1,4 @@
-package com.example.lockdown;
+package com.ashwinsagar.lockdown;
 
 import android.text.Editable;
 import android.text.TextWatcher;
