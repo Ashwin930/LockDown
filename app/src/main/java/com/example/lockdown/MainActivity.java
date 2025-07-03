@@ -76,21 +76,14 @@ public class MainActivity extends AppCompatActivity {
 
         MobileAds.initialize(this, initializationStatus -> {});
 
-/*// Create a new ad view.
-        adView = new AdView(this);
-        adView.setAdUnitId(AD_UNIT_ID);
-// Request an anchored adaptive banner with a width of 360.
-        adView.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, 360));
-
-// Replace ad container with new ad view.
-        adContainerView.removeAllViews();
-        adContainerView.addView(adView);*/
 
 
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        //Initialize the Ad
 
         MobileAds.initialize(this, initializationStatus -> {});
 
@@ -140,40 +133,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-        /*hourInputSpinner = findViewById(R.id.hourInputSpinner);
-        minuteInputSpinner = findViewById(R.id.minuteInputSpinner);*/
-
-        /*ArrayList<Integer> hourList = new ArrayList<>();
-        for (int i = 0; i <=12 ; i++) {
-            hourList.add(i);
-        }
-
-        ArrayAdapter<Integer> hourAdapter = new ArrayAdapter<>(this, R.layout.spinner_no_arrow,hourList);
-        hourAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
-        hourInputSpinner.setAdapter(hourAdapter);
-
-        ArrayList<Integer> minuteList = new ArrayList<>();
-        for (int i = 0; i <=55 ; i+=5) {
-            minuteList.add(i);
-        }
-
-        ArrayAdapter<Integer> minuteAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,minuteList);
-        minuteInputSpinner.setAdapter(minuteAdapter);*/
-
-//        if (!isDNDPermissionGranted()) {
-//            showDNDPermissionDialog();
-//            return;
-//        }
-
+        //listing click on button
         startLockDownBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //getting inputs
                 String hourStr = hourInput.getText().toString();
                 String minuteStr = minuteInput.getText().toString();
-
-
-
                 int hours = hourStr.isEmpty()?0:Integer.parseInt(hourStr);
                 int minutes = minuteStr.isEmpty()?0:Integer.parseInt(minuteStr);
                 String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
@@ -181,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 if(hours==0 && minutes ==0) {
                     Toast.makeText(MainActivity.this,"Enter Valid time",Toast.LENGTH_SHORT).show();
                 }else{
+                    //calling the startLockdown method
                     startLockdown(hours,minutes);
                 }
 
@@ -198,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+    //method to Lock the screen
     private void startLockdown(int hours,int minutes) {
 
         //hiding Texts
@@ -229,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
         long timeDuration  = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
 
-        // Start a 1-minute timer
+
         lockdownCounter = new CountDownTimer(timeDuration, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Optional: update UI with remaining time
@@ -250,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
+
+    //method to release the lock
     public void stopLockDown(){
 
         if(lockdownCounter !=null){
@@ -283,6 +256,8 @@ public class MainActivity extends AppCompatActivity {
         isInLockDown = false;
     }
 
+
+    //blocking back key
     @Override
     public void onBackPressed() {
         if (isInLockDown) {
@@ -292,6 +267,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    //listening volume up key
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && isInLockDown) {
@@ -319,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    //vibration trigger
     private void triggerVibration() {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null && vibrator.hasVibrator()) {
@@ -330,24 +308,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*private boolean isDNDPermissionGranted() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return notificationManager.isNotificationPolicyAccessGranted();
-        } else {
-            return true; // Not required on older Android versions
-        }
-    }
-    private void showDNDPermissionDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Allow Do Not Disturb Access")
-                .setMessage("To silence notifications during Lockdown, please allow DND access.")
-                .setPositiveButton("Allow", (dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                    startActivity(intent);
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }*/
 }
